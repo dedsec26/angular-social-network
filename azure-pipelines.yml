@@ -6,6 +6,8 @@ trigger:
 pool:
   name: 'angular'  # Replace with the name of your self-hosted agent pool
 
+variables:
+- group: angularGroup
 steps:
 - task: NodeTool@0
   inputs:
@@ -13,15 +15,14 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-    npm install -g @angular/cli
     npm install
     npm run build
-  displayName: 'Install Angular CLI and Build Application'
+  displayName: 'Install and Build Application'
 
 - task: Docker@2
   inputs:
-    containerRegistry: 'docker'  # Replace with your container registry connection name
-    repository: 'aftocr/angular'  # Replace with your Docker repository name
+    containerRegistry: $(containerRegistry)  # Replace with your container registry connection name
+    repository: $(repository)  # Replace with your Docker repository name
     command: 'buildAndPush'
-    Dockerfile: 'Dockerfile'
-  displayName: 'Build and Push Docker Image'
+    Dockerfile: $(dockerfile)
+  displayName: 'Build and Push Docker Image $(dockerfile) $(containerRegistry) $(repository)'
