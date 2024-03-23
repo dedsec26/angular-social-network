@@ -24,6 +24,4 @@ steps:
     repository: 'aftocr/angular'  # Replace with your Docker repository name
     command: 'buildAndPush'
     Dockerfile: 'Dockerfile'
-    tags: |
-      $(Build.BuildId)
   displayName: 'Build and Push Docker Image'
