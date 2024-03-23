@@ -1,14 +1,8 @@
 # Use a lightweight base image
-FROM alpine:3.19
-
-# Set working directory
-WORKDIR /app
+FROM node:18 as build
 
 # Copy package.json and package-lock.json
-COPY package*.json ./
-
-# Install Angular CLI
-RUN npm install -g @angular/cli
+COPY package.json ./
 
 # Install project dependencies
 RUN npm install
