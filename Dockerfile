@@ -1,5 +1,5 @@
 # Use a lightweight base image
-FROM node:alpine
+FROM alpine:3.19
 
 # Set working directory
 WORKDIR /app
