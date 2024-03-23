@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-      - main  # Or whichever branch you want to trigger the pipeline
+      - master  # Or whichever branch you want to trigger the pipeline
 
 pool:
   name: 'angular'  # Replace with the name of your self-hosted agent pool
