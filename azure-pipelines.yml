@@ -23,7 +23,7 @@ steps:
     containerRegistry: 'docker'  # Replace with your container registry connection name
     repository: 'aftocr/angular'  # Replace with your Docker repository name
     command: 'buildAndPush'
-    Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+    Dockerfile: 'Dockerfile'
     tags: |
       $(Build.BuildId)
   displayName: 'Build and Push Docker Image'
