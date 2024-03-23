@@ -1,11 +1,13 @@
 trigger:
   branches:
     include:
-      - master
+      - master  
 
 pool:
-  name: "angular"
+  name: 'angular'  
 
+variables:
+- group: angularGroup
 steps:
   - task: NodeTool@0
     inputs:
@@ -13,15 +15,14 @@ steps:
     displayName: "Install Node.js"
 
   - script: |
-      npm install -g @angular/cli
-      npm install
+        npm install
       npm run build
-    displayName: "Install Angular CLI and Build Application"
+    displayName: "Install and Build Application"
 
-  - task: Docker@2
-    inputs:
-      containerRegistry: $(containerRegistry)
-      repository: $(repository)
-      command: "buildAndPush"
-      Dockerfile: $(dockerfile)
-    displayName: "Build and Push Docker Image $(dockerfile) $(containerRegistry) $(repository)"
+- task: Docker@2
+  inputs:
+    containerRegistry: $(containerRegistry)  
+    repository: $(repository)  
+    command: 'buildAndPush'
+    Dockerfile: $(dockerfile)
+  displayName: 'Build and Push Docker Image $(dockerfile) $(containerRegistry) $(repository)'
