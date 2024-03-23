@@ -1,18 +1,14 @@
 trigger:
   branches:
     include:
-      - master  # Or whichever branch you want to trigger the pipeline
+      - master  
 
 pool:
-  name: 'angular'  # Replace with the name of your self-hosted agent pool
+  name: 'angular'  
 
 variables:
 - group: angularGroup
 steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '14.x'
-  displayName: 'Install Node.js'
 
 - script: |
     npm install
@@ -21,8 +17,8 @@ steps:
 
 - task: Docker@2
   inputs:
-    containerRegistry: $(containerRegistry)  # Replace with your container registry connection name
-    repository: $(repository)  # Replace with your Docker repository name
+    containerRegistry: $(containerRegistry)  
+    repository: $(repository)  
     command: 'buildAndPush'
     Dockerfile: $(dockerfile)
   displayName: 'Build and Push Docker Image $(dockerfile) $(containerRegistry) $(repository)'
