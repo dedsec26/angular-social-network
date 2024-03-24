@@ -14,10 +14,13 @@ steps:
       versionSpec: "18.x"
     displayName: "Install Node.js"
 
-  - script: |
+  - script:
       npm install
+    displayName: "Install"
+
+  - script:
       npm run build
-    displayName: "Install and Build Application"
+    displayName: "Build Application"
 
   - task: PublishBuildArtifacts@1
     inputs:
