@@ -1,11 +1,10 @@
+FROM node:18 as build
+WORKDIR /
+COPY package.json ./
+RUN npm install
+COPY . .
+RUN npm run build
 FROM nginx:alpine
-
-# Create a directory to copy build artifacts
-WORKDIR /usr/share/nginx/html
-
-# Copy build artifacts from the drop location to the container
-COPY ./angular-artifacts /usr/share/nginx/html
-
+COPY --from=build /dist/angular-social-network /usr/share/nginx/html
 EXPOSE 80
-
 CMD ["nginx", "-g", "daemon off;"]
