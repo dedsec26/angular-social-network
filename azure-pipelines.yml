@@ -22,12 +22,6 @@ steps:
       npm run build
     displayName: "Build Application"
 
-  - task: PublishBuildArtifacts@1
-    inputs:
-      pathtoPublish: "$(Build.SourcesDirectory)/dist/angular-social-network"
-      artifactName: "angular-artifacts"
-      publishLocation: "Container"
-
   - task: Docker@2
     inputs:
       containerRegistry: $(containerRegistry)
