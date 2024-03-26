@@ -8,30 +8,48 @@ pool:
 
 variables:
   - group: angularGroup
-steps:
-  - task: NodeTool@0
-    inputs:
-      versionSpec: "18.x"
-    displayName: "Install Node.js"
 
-  - script:
-      npm install
-    displayName: "Install"
+stages:
+  - stage: Build
+    displayName: "Build and Test"
+    jobs:
+      - job: Build
+        displayName: "Build"
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: "18.x"
+            displayName: "Install Node.js"
 
-  - script:
-      npm run build
-    displayName: "Build Application"
+          - script: npm install
+            displayName: "Install"
 
-  - task: PublishBuildArtifacts@1
-    inputs:
-      pathtoPublish: "$(Build.SourcesDirectory)/dist/angular-social-network"
-      artifactName: "angular-artifacts"
-      publishLocation: "Container"
+          - script: npm run build
+            displayName: "Build Application"
 
-  - task: Docker@2
-    inputs:
-      containerRegistry: $(containerRegistry)
-      repository: $(repository)
-      command: "buildAndPush"
-      Dockerfile: $(dockerfile)
-    displayName: "Build and Push Docker Image $(dockerfile) $(containerRegistry) $(repository)"
+          - task: Docker@2
+            inputs:
+              containerRegistry: $(containerRegistry)
+              repository: $(repository)
+              command: "buildAndPush"
+              Dockerfile: $(dockerfile)
+            displayName: "Build and Push Docker Image $(dockerfile) $(containerRegistry) $(repository)"
+            tags:
+
+  - stage: Deploy_VM
+    displayName: "Deploy to VM"
+    dependsOn: Build
+    condition: succeeded()
+    jobs:
+      - job: Deploy_VM
+        displayName: "Deploy to VM"
+        steps:
+          - task: SSH@0
+            inputs:
+            sshEndpoint: "dockervm"
+            runOptions: "inline"
+            inline: |
+              docker rm -f angular || true
+              docker pull aftocr/angular:latest
+              docker run -d -p 81:80 --name angular aftocr/angular:latest
+            readyTimeout: "20000"
